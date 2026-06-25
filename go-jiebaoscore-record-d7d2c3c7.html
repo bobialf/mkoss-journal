@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>捷报比分 · 赛事数据与实时资讯</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: linear-gradient(145deg, #fdf3e7 0%, #fce4d6 40%, #fbe9e0 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 1.25rem;
+            line-height: 1.6;
+            color: #3b2b24;
+        }
+
+        .container {
+            max-width: 1100px;
+            width: 100%;
+        }
+
+        /* 卡片通用设计 */
+        .card {
+            background: #fffffffa;
+            border-radius: 36px;
+            padding: 2.4rem 2rem;
+            margin-bottom: 2.2rem;
+            box-shadow: 0 12px 28px -8px rgba(180, 110, 70, 0.18), 0 4px 12px rgba(0,0,0,0.03);
+            backdrop-filter: blur(2px);
+            transition: transform 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 18px 32px -10px rgba(170, 95, 60, 0.22);
+        }
+
+        /* hero 区域 */
+        .hero {
+            background: linear-gradient(135deg, #fae4d1, #f7d5bd);
+            border-radius: 48px 48px 36px 36px;
+            padding: 3rem 2.4rem 2.6rem;
+            text-align: center;
+            margin-bottom: 2.2rem;
+            position: relative;
+            border: 1px solid rgba(255, 220, 190, 0.5);
+        }
+
+        .hero h1 {
+            font-size: 2.6rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            color: #3a241c;
+            margin-bottom: 0.9rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 680px;
+            margin: 0.4rem auto 1.2rem;
+            color: #54423a;
+        }
+
+        .hero-tag {
+            display: inline-block;
+            background: #b87a5cd4;
+            color: white;
+            font-size: 0.9rem;
+            font-weight: 500;
+            padding: 0.35rem 1.2rem;
+            border-radius: 40px;
+            letter-spacing: 0.3px;
+            backdrop-filter: blur(2px);
+            box-shadow: 0 2px 6px rgba(140, 80, 50, 0.15);
+        }
+
+        /* 特色网格 */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-top: 0.6rem;
+        }
+
+        .feature-item {
+            background: #f9f1ea;
+            border-radius: 28px;
+            padding: 1.5rem 1.2rem;
+            text-align: center;
+            border: 1px solid #f1ddd0;
+        }
+
+        .feature-item h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #4b3128;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-item p {
+            font-size: 0.95rem;
+            color: #5e4a40;
+        }
+
+        .feature-icon {
+            font-size: 2.2rem;
+            display: block;
+            margin-bottom: 0.5rem;
+            opacity: 0.8;
+        }
+
+        /* 说明区 - 双列 */
+        .explain-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .explain-main {
+            flex: 2;
+            min-width: 260px;
+        }
+
+        .explain-side {
+            flex: 1.2;
+            min-width: 200px;
+            background: #f8ede5;
+            border-radius: 28px;
+            padding: 1.6rem 1.4rem;
+            border: 1px solid #eddccf;
+        }
+
+        .explain-side h4 {
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: #3f2d25;
+        }
+
+        .explain-side ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .explain-side li {
+            padding: 0.35rem 0;
+            border-bottom: 1px dashed #e5cdbc;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: baseline;
+        }
+
+        .explain-side li::before {
+            content: "▹";
+            margin-right: 8px;
+            color: #b57757;
+        }
+
+        .explain-side li:last-child {
+            border-bottom: none;
+        }
+
+        /* FAQ 摘要卡片 */
+        .faq-summary {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .faq-item {
+            border-left: 4px solid #cb9b80;
+            padding-left: 1.2rem;
+        }
+
+        .faq-item strong {
+            display: block;
+            font-weight: 600;
+            color: #3d2b22;
+            margin-bottom: 0.15rem;
+        }
+
+        .faq-item p {
+            color: #5b463b;
+            font-size: 0.98rem;
+        }
+
+        /* 底部链接 */
+        .footer-links {
+            text-align: center;
+            padding: 1.4rem 0 0.8rem;
+            border-top: 1px solid #e6d3c5;
+            margin-top: 1rem;
+        }
+
+        .footer-links a {
+            color: #7a5543;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.3rem 0.6rem;
+            border-radius: 40px;
+            transition: all 0.2s;
+            background: #f2e3d9;
+            display: inline-block;
+            margin: 0.3rem 0.5rem;
+            font-size: 0.95rem;
+            border: 1px solid transparent;
+        }
+
+        .footer-links a:hover {
+            background: #e7d2c4;
+            border-color: #c9aa96;
+            color: #3b241c;
+        }
+
+        .footer-note {
+            color: #7a6256;
+            font-size: 0.85rem;
+            margin-top: 1.2rem;
+            letter-spacing: 0.3px;
+        }
+
+        /* 响应式 */
+        @media (max-width: 600px) {
+            body {
+                padding: 1.25rem 0.9rem;
+            }
+            .card {
+                padding: 1.6rem 1.2rem;
+            }
+            .hero {
+                padding: 2.2rem 1.2rem 1.8rem;
+            }
+            .hero h1 {
+                font-size: 1.9rem;
+            }
+            .feature-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 1rem;
+            }
+            .explain-wrap {
+                flex-direction: column;
+            }
+            .footer-links a {
+                display: inline-block;
+                margin: 0.3rem 0.3rem;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 按钮风格的内联链接 (不包含“进入”等词) */
+        .link-btn {
+            display: inline-block;
+            background: #dbb7a2;
+            color: #2f1f19;
+            padding: 0.3rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: 0.2s;
+            border: 1px solid #c7a48d;
+        }
+
+        .link-btn:hover {
+            background: #d0aa92;
+            border-color: #b3886f;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <!-- Hero 区 -->
+    <div class="hero">
+        <div class="hero-tag">实时 · 全面 · 赛事数据</div>
+        <h1>捷报比分 · 赛场脉搏</h1>
+        <p>从核心联赛到小众杯赛，比分、赛程与统计信息持续更新。无论你关注的是焦点战役还是青训梯队，都能在这里找到结构化的数据支撑。</p>
+        <div style="margin-top: 1rem;">
+            <span style="background: #b87a5c; color: #fff; padding: 0.4rem 1.6rem; border-radius: 40px; font-weight: 500; display: inline-block;">覆盖 50+ 赛事体系</span>
+        </div>
+    </div>
+
+    <!-- 优势区 - 四个特点卡片 -->
+    <div class="card">
+        <h2 style="font-weight: 600; color: #3f2b22; margin-bottom: 1.2rem; font-size: 1.6rem;">为什么值得留意</h2>
+        <div class="feature-grid">
+            <div class="feature-item">
+                <span class="feature-icon">📊</span>
+                <h3>多维度统计</h3>
+                <p>积分榜、射手榜、助攻榜、红黄牌…… 数据维度按联赛特点单独梳理。</p>
+            </div>
+            <div class="feature-item">
+                <span class="feature-icon">⏱️</span>
+                <h3>滚动更新</h3>
+                <p>重点比赛分钟级刷新，关键事件（进球、换人、点球）实时呈现。</p>
+            </div>
+            <div class="feature-item">
+                <span class="feature-icon">📅</span>
+                <h3>赛程规划</h3>
+                <p>未来一个月赛历、已完赛结果、历史交锋记录，方便回顾与前瞻。</p>
+            </div>
+            <div class="feature-item">
+                <span class="feature-icon">🌍</span>
+                <h3>跨联赛覆盖</h3>
+                <p>欧洲主流联赛、亚洲赛事、南美解放者杯、非洲区预选等均有收录。</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 说明区 + 侧边要点 -->
+    <div class="card">
+        <div class="explain-wrap">
+            <div class="explain-main">
+                <h2 style="font-weight: 600; color: #3f2b22; font-size: 1.5rem; margin-bottom: 0.8rem;">不止是比分</h2>
+                <p style="margin-bottom: 1rem;">
+                    许多体育数据平台只提供最终结果，但 <a href="https://go-jiebaoscore.com" style="color: #975f44; font-weight: 600; text-decoration: underline; text-underline-offset: 3px;">捷报比分</a> 更注重过程数据的结构化呈现。每场比赛的控球率、射正次数、角球、犯规、红黄牌等详细统计都会按时间线整理。对于深度爱好者或分析者来说，这些细颗粒度信息能辅助判断球队状态与战术倾向。
+                </p>
+                <p>
+                    平台还根据不同联赛的规则差异做了适配——例如部分杯赛的加时赛数据、青年联赛的特殊换人名额等，都会在对应页面单独标注。数据来源持续校准，减少延迟与误差。
+                </p>
+            </div>
+            <div class="explain-side">
+                <h4>适合这些场景</h4>
+                <ul>
+                    <li>赛前查阅双方近期交锋记录</li>
+                    <li>赛后复盘关键统计对比</li>
+                    <li>关注某位球员的连续出场与进球</li>
+                    <li>跟踪升降级区或争冠组形势</li>
+                    <li>了解不同联赛的节奏差异</li>
+                </ul>
+                <div style="margin-top: 1rem; padding-top: 0.8rem; border-top: 1px solid #e1cdbd; font-size: 0.9rem; color: #5d463c;">
+                    <span>🔍 数据维度因赛事而异，以实际页面展示为准。</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAQ 摘要卡片 (4个常见问点) -->
+    <div class="card">
+        <h2 style="font-weight: 600; color: #3f2b22; font-size: 1.5rem; margin-bottom: 1.2rem;">常见疑问 · 摘要</h2>
+        <div class="faq-summary">
+            <div class="faq-item">
+                <strong>⚽ 数据更新频率如何？</strong>
+                <p>重点赛事（如五大联赛、欧冠、亚冠）通常为 1–2 分钟刷新；其余赛事视数据源情况，尽量保持同步。极端延迟时会显示“数据校准中”。</p>
+            </div>
+            <div class="faq-item">
+                <strong>📌 是否包含历史赛季数据？</strong>
+                <p>大部分主流联赛保留近 5–8 个赛季的完整数据，部分低级别或杯赛保留最近 2–3 个赛季。具体可在赛事页面查看赛季选择器。</p>
+            </div>
+            <div class="faq-item">
+                <strong>🧩 移动端浏览体验如何？</strong>
+                <p>页面采用响应式布局，在手机与平板上会自动调整卡片、表格与导航。建议使用系统自带浏览器或 Chrome，兼容性较稳定。</p>
+            </div>
+            <div class="faq-item">
+                <strong>🔗 从哪里获取更多细节？</strong>
+                <p>你可以直接访问 <a href="https://go-jiebaoscore.com" style="color: #975f44; font-weight: 600; text-decoration: underline; text-underline-offset: 2px;">捷报比分</a> 主页，根据顶部导航或搜索框进入具体联赛或球队页面。所有数据均免费阅览，无隐藏付费模块。</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部链接 (含自然嵌入) -->
+    <div class="footer-links">
+        <p style="margin-bottom: 0.6rem; color: #563f35;">
+            如果你需要查询某个联赛的实时积分或赛程，<a href="https://go-jiebaoscore.com" class="link-btn">捷报比分</a> 的数据面板提供了清晰的入口。
+        </p>
+        <p style="margin: 0.8rem 0 0.3rem; font-size: 0.9rem; color: #624b3f;">
+            <span>数据仅供个人参考，不构成任何投注建议。</span>
+        </p>
+        <div class="footer-note">
+            © 内容整理 · 2025 · 页面仅作信息展示
+        </div>
+    </div>
+
+    <!-- 隐藏的种子标识 (仅用于变化) 不显示 -->
+</div>
+</body>
+</html>
